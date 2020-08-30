@@ -23,7 +23,7 @@ def setThreshold(newVal):
 
 def main():
     global img, rho, angle, threshold
-    imageList = ["prac03ex03img01.png", "prac03ex03img02.jpg", "1500x500.png"]
+    imageList = ["prac03ex03img01.png", "prac03ex03img02.jpg"]
     for i, imagename in enumerate(imageList):
         img = cv.imread("assets\\"+str(imagename))
         houghTransformP()
@@ -43,8 +43,8 @@ def houghTransformP():
 
     if lines is not None:
         imgCopy = img.copy()
-        for i in lines:
-            r,theta = lines[0]
+        for line in lines:
+            r,theta = line[0]
             a = np.cos(theta)
             b = np.sin(theta)
             x = a * r
