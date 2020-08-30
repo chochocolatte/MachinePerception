@@ -13,7 +13,8 @@ def setRho(rhoVal):
 
 def setAngle(angleVal):
     global angle
-    angle = angleVal
+    if angleVal > 0:
+        angle = float(angleVal)*(np.pi/180)
     houghTransformP()
 
 def setThreshold(newVal):
@@ -38,7 +39,7 @@ def houghTransformP():
     print("ANGLE IS NOW " + str(angle))
     print("THRESHOLD IS NOW " + str(threshold))
     edge = cv.Canny(img,100,300)
-    cv.imshow("Edge",edge)
+    cv.imshow("Edge Detection",edge)
     lines = cv.HoughLines(edge,rho,angle,threshold)
     if lines is not None:
         imgCopy = img.copy()
@@ -51,8 +52,8 @@ def houghTransformP():
 
             point1 = (int(x+1000*(-b)),int(y+1000*(a)))
             point2 = (int(x-1000*(-b)),int(y-1000*(a)))
-            imgCopy = cv.line(imgCopy,point1,point2,(0,0,255),2)
-        cv.imshow("edge Detection",imgCopy)
+            imgCopy = cv.line(imgCopy,point1,point2,(0,0,255),1)
+        cv.imshow("Edge Detection",imgCopy)
 
 
 if __name__ == '__main__':
