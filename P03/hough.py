@@ -40,7 +40,6 @@ def houghTransformP():
     edge = cv.Canny(img,100,300)
     cv.imshow("Edge",edge)
     lines = cv.HoughLines(edge,rho,angle,threshold)
-
     if lines is not None:
         imgCopy = img.copy()
         for line in lines:
