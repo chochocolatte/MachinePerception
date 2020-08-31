@@ -7,7 +7,7 @@ def main():
     imageName = 'prac04ex02img01.png'
     img = cv.imread("assets\\"+str(imageName),cv.IMREAD_GRAYSCALE)
     img_result = cv.threshold(img,0,255,cv.THRESH_BINARY|cv.THRESH_OTSU)[1]
-    ret,label = cv.connectedComponents(img_result,connectivity=4)
+    ret,label = cv.connectedComponents(img_result,connectivity=8)
     img_result=CCL(label)
     MSER(cv.cvtColor(img_result,cv.COLOR_RGB2GRAY))
     cv.imshow(None,img_result)
@@ -36,14 +36,6 @@ def MSER(image):
         for (x,y,w,h) in rectangle:
             cropped = image[y:y+h,x:x+w]
             cv.imwrite("binary\\"+str(x)+","+str(y)+","+str(w)+","+str(h)+".png",cropped)
-
-def commonHeight(rec):
-    result = 0
-    i=0
-    for height in rec[3]:
-        result += height
-        i+=1
-    average = result/i
 
 if __name__ == '__main__':
     main()
