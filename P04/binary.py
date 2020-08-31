@@ -27,13 +27,23 @@ def CCL(labels):
 
 def MSER(image):
     if image is not None:
+        (h, w) = image.shape[:2]
         mser = cv.MSER_create()
+        mser.setMaxArea(int((h*w)/2))
+        mser.setMinArea(10)
 
         rectangle = mser.detectRegions(image)[1]
         for (x,y,w,h) in rectangle:
             cropped = image[y:y+h,x:x+w]
-            cv.imwrite("binary\\"+str(x)+str(y)+str(w)+str(h)+".png",cropped)
+            cv.imwrite("binary\\"+str(x)+","+str(y)+","+str(w)+","+str(h)+".png",cropped)
 
+def commonHeight(rec):
+    result = 0
+    i=0
+    for height in rec[3]:
+        result += height
+        i+=1
+    average = result/i
 
 if __name__ == '__main__':
     main()
