@@ -1,0 +1,2 @@
+Scale invariance is a feature of objects or laws that do not change if scales of length are multiplied by a common factor.
+Rotational invariance means the same corner will be outputted if the image is rotated. Harris corner is not scale invariant.
