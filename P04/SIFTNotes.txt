@@ -1,2 +1,6 @@
 The first image prac04ex01img01.png has 100 keypoints
 The second image prac04ex01img02.png has 117 keypoints. The second image is slightly rotated image of first image.
+
+The keypoints are clustered whenever there is a corner. The most of the location of keypoints are distributed near the corner
+unlike Harris corner where the point is exactly on the corner.
+

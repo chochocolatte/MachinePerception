@@ -20,9 +20,9 @@ def main():
         kp,des = sift.compute(grayScale,keypoints)
         #des.shape will output x,128
         #where x means there are 100 keypoints within the image and 128 represents the bin values are available
-        print(des.shape)
 
         cv.imwrite("SIFT\\"+str(imageName)+".png",img)
+        cv.imwrite("descriptor\\des"+str(imageName),des)
 
     return 0
 
