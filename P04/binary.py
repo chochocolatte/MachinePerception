@@ -6,10 +6,18 @@ np.set_printoptions(linewidth=np.inf)
 def main():
     imageName = 'prac04ex02img01.png'
     img = cv.imread("assets\\"+str(imageName),cv.IMREAD_GRAYSCALE)
-    img_result = cv.threshold(img,0,255,cv.THRESH_BINARY|cv.THRESH_OTSU)[1]
-    ret,label = cv.connectedComponents(img_result,connectivity=8)
-    img_result=CCL(label)
-    MSER(cv.cvtColor(img_result,cv.COLOR_RGB2GRAY))
+    img_result = cv.threshold(img,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)[1]
+    output= cv.connectedComponentsWithStats(img_result, connectivity=8)
+    #connectedComponents returns:
+    #1 - the number of label
+    #2 - labels matrix
+    #where as connected components with stats returns
+    #1 - number of labels
+    #2 - labels matrix
+    #3 - stats matrix
+    #4 - centroid matrix
+    print(output[1])
+    img_result=CCL(output[1])
     cv.imshow(None,img_result)
     cv.waitKey()
     return 0
@@ -25,17 +33,7 @@ def CCL(labels):
 
     return labeled_img
 
-def MSER(image):
-    if image is not None:
-        (h, w) = image.shape[:2]
-        mser = cv.MSER_create()
-        mser.setMaxArea(int((h*w)/2))
-        mser.setMinArea(10)
 
-        rectangle = mser.detectRegions(image)[1]
-        for (x,y,w,h) in rectangle:
-            cropped = image[y:y+h,x:x+w]
-            cv.imwrite("binary\\"+str(x)+","+str(y)+","+str(w)+","+str(h)+".png",cropped)
 
 if __name__ == '__main__':
     main()

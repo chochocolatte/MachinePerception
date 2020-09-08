@@ -12,6 +12,7 @@ def main():
         sift = cv.xfeatures2d.SIFT_create()
         keypoints = sift.detect(grayScale,None)
         #the length of the keypoints is x which represent the number of keypoints
+        print(keypoints)
 
         img = cv.drawKeypoints(grayScale,keypoints,img,flags=cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
