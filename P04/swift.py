@@ -3,39 +3,47 @@ import numpy as np
 from matplotlib import pyplot as plot
 
 def main():
-    image = ["prac04ex01img01.png","prac04ex01img02.png"]
+    original = "prac04ex01img01.png"
+    test = "prac04ex01img02.png"
 
-    for x,imageName in enumerate(image):
-        img = cv.imread("assets\\"+str(imageName))
-        grayScale = cv.cvtColor(img,cv.COLOR_RGB2GRAY)
+    originalImage = cv.imread("assets\\"+str(original))
+    testImage = cv.imread("assets\\"+str(test))
 
-        sift = cv.xfeatures2d.SIFT_create()
-        keypoints = sift.detect(grayScale,None)
-        #the length of the keypoints is x which represent the number of keypoints
-        print(keypoints)
+    #for original image
+    training_image = cv.cvtColor(originalImage,cv.COLOR_BGR2RGB)
+    grayScale = cv.cvtColor(training_image,cv.COLOR_RGB2GRAY)
 
-        img = cv.drawKeypoints(grayScale,keypoints,img,flags=cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    #for testImage
+    testImage = cv.cvtColor(testImage,cv.COLOR_BGR2RGB)
+    grayScale2 = cv.cvtColor(testImage,cv.COLOR_RGB2GRAY)
 
-        #using .compute method to detect descriptor
 
-        kp,des = sift.compute(grayScale,keypoints)
-        #des.shape will output x,128
-        #where x means there are 100 keypoints within the image and 128 represents the bin values are available
 
-        cv.imwrite("SIFT\\"+str(imageName)+".png",img)
-        cv.imwrite("descriptor\\des"+str(imageName),des)
+    #sift of the training image
 
-    return 0
+    sift = cv.xfeatures2d.SIFT_create()
 
-def writeFile(array):
-    # writing array des into file:
-    with open("descriptors.txt", 'w') as f:
-        for item in array:
-            f.write("%s\n" % item)
+    keypoints, descriptors = sift.detectAndCompute(grayScale,None)
 
-def printHistogram(des,imageName):
-    plot.hist(des, 36)
-    plot.title("Histogram For Descriptor" + str(imageName))
+    kp2,des2 = sift.detectAndCompute(grayScale2,None)
+
+    #draw the keypoints
+
+    train_keypoints = cv.drawKeypoints(grayScale,keypoints,None,flags=cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    test_keypoints = cv.drawKeypoints(grayScale2,kp2,None,flags=cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+    #match the keypoints
+
+    bf_object= cv.BFMatcher(cv.NORM_L1,crossCheck=False)
+
+    matches = bf_object.match(descriptors,des2)
+    matches= sorted(matches,key=lambda  x : x.distance)
+
+    result = cv.drawMatches(grayScale,keypoints,grayScale2,kp2,matches,grayScale2,flags=2)
+
+    plot.rcParams['figure.figsize'] = [14.0, 7.0]
+    plot.title('Best Matching Points')
+    plot.imshow(result)
     plot.show()
 
 if __name__ == '__main__':
