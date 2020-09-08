@@ -7,7 +7,7 @@ def main():
     imageName = 'prac04ex02img01.png'
     img = cv.imread("assets\\"+str(imageName),cv.IMREAD_GRAYSCALE)
     img_result = cv.threshold(img,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)[1]
-    output= cv.connectedComponentsWithStats(img_result, connectivity=8)
+    output= cv.connectedComponentsWithStats(img_result, connectivity=4)
     #connectedComponents returns:
     #1 - the number of label
     #2 - labels matrix
@@ -16,10 +16,8 @@ def main():
     #2 - labels matrix
     #3 - stats matrix
     #4 - centroid matrix
-    print(output[1])
     img_result=CCL(output[1])
-    cv.imshow(None,img_result)
-    cv.waitKey()
+    contours(cv.cvtColor(img_result,cv.COLOR_BGR2GRAY),img_result.copy())
     return 0
 
 def CCL(labels):
@@ -33,6 +31,21 @@ def CCL(labels):
 
     return labeled_img
 
+def contours(image,oriimage):
+
+    con= cv.findContours(image,cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    index=1
+
+    con = con[0] if len(con) == 2 else con[1]
+
+    for i in con:
+        x,y,w,h = cv.boundingRect(i)
+        cv.rectangle(image, (x, y), (x + w, y + h), (36, 255, 12), 2)
+        ROI = oriimage[y:y+h,x:x+w]
+        cv.imwrite("binary\\"+str(index)+".png",ROI)
+        index+=1
+    cv.imshow('image', image)
+    cv.waitKey()
 
 
 if __name__ == '__main__':
